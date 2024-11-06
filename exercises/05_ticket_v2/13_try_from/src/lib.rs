@@ -1,11 +1,43 @@
 // TODO: Implement `TryFrom<String>` and `TryFrom<&str>` for `Status`.
 //  The parsing should be case-insensitive.
+use std::collections::HashMap;
 
 #[derive(Debug, PartialEq, Clone)]
 enum Status {
     ToDo,
     InProgress,
     Done,
+}
+
+impl TryFrom<String> for Status {
+    type Error = ();
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        let mut hs = HashMap::new();
+        hs.insert(String::from("done"), Status::Done);
+        hs.insert(String::from("inprogress"), Status::InProgress);
+        hs.insert(String::from("todo"), Status::ToDo);
+
+        println!("{:?}", hs);
+        match hs.get(value.to_lowercase().as_str()) {
+            Some(v) => Ok(v.clone()),
+            _ => Err(()),
+        }
+    }
+}
+
+impl TryFrom<&str> for Status {
+    type Error = ();
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let v = value.to_lowercase();
+        match v.as_str() {
+            "done" => Ok(Status::Done),
+            "inprogress" => Ok(Status::InProgress),
+            "todo" => Ok(Status::ToDo),
+            _ => Err(()),
+        }
+    }
 }
 
 #[cfg(test)]

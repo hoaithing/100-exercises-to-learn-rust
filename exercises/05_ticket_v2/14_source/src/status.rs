@@ -14,9 +14,7 @@ impl TryFrom<String> for Status {
             "todo" => Ok(Status::ToDo),
             "inprogress" => Ok(Status::InProgress),
             "done" => Ok(Status::Done),
-            _ => Err(ParseStatusError {
-                invalid_status: value,
-            }),
+            _ => Err(ParseStatusError { invalid_status: value}),
         }
     }
 }

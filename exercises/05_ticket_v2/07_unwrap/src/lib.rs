@@ -3,14 +3,9 @@
 //   "Description not provided".
 
 fn easy_ticket(title: String, description: String, status: Status) -> Ticket {
-    let mut description = String::from(description.trim());
-    if title.is_empty() {
-        panic!("Title cannot be empty!");
-    } else if description.is_empty() {
-        description = "Description not provided".to_string();
-    }
-    Ticket{
-        title, description, status
+    match Ticket::new(title, description, status) {
+        Ok(mut ticket) => ticket,
+        Err(e) => panic!("{}", e.to_string()),
     }
 }
 
@@ -30,6 +25,7 @@ enum Status {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: Status) -> Result<Ticket, String> {
+        let mut description = description.clone();
         if title.is_empty() {
             return Err("Title cannot be empty".to_string());
         }
@@ -37,10 +33,10 @@ impl Ticket {
             return Err("Title cannot be longer than 50 bytes".to_string());
         }
         if description.is_empty() {
-            return Err("Description cannot be empty".to_string());
+            description = "Description not provided".to_string();
         }
         if description.len() > 500 {
-            return Err("Description cannot be longer than 500 bytes".to_string());
+            description = "Description not provided".to_string()
         }
 
         Ok(Ticket {
