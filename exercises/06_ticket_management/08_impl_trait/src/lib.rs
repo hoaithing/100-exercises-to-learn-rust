@@ -31,6 +31,10 @@ impl TicketStore {
     pub fn add_ticket(&mut self, ticket: Ticket) {
         self.tickets.push(ticket);
     }
+
+    pub fn in_progress(&self) -> Vec<&Ticket> {
+        self.tickets.iter().filter(|t| t.status == Status::InProgress).collect()
+    }
 }
 
 #[cfg(test)]
@@ -56,7 +60,7 @@ mod tests {
         };
         store.add_ticket(in_progress.clone());
 
-        let in_progress_tickets: Vec<&Ticket> = store.in_progress().collect();
+        let in_progress_tickets: Vec<&Ticket> = store.in_progress();
         assert_eq!(in_progress_tickets.len(), 1);
         assert_eq!(in_progress_tickets[0], &in_progress);
     }
